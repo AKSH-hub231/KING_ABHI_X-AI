@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>KING_ABHI_X</title>
+<style>
+body{margin:0;font-family:Arial;background:#0b1220;color:white}
+header{padding:15px;text-align:center;background:#111a33;font-size:22px}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:20px}
+.card{background:#1b2550;padding:25px;text-align:center;border-radius:12px;cursor:pointer}
+.section{display:none;padding:20px}
+button{padding:10px;border:none;border-radius:8px;background:#4f7cff;color:white}
+textarea,select{width:100%;margin-top:10px;padding:10px;border-radius:8px}
+</style>
+</head>
+
+<body>
+
+<header>🔥 KING_ABHI_X – AI STUDIO</header>
+
+<div id="home" class="section" style="display:block">
+  <div class="menu">
+    <div class="card" onclick="openPage('image')">AI IMAGE</div>
+    <div class="card" onclick="openPage('voice')">AI VOICE</div>
+    <div class="card" onclick="openPage('long')">LONG VIDEO</div>
+    <div class="card" onclick="alert('Coming Soon')">AI VIDEO</div>
+  </div>
+</div>
+
+<div id="image" class="section">
+  <button onclick="goHome()">⬅ Back</button>
+  <h2>AI IMAGE</h2>
+  <textarea id="img_prompt"></textarea>
+  <button onclick="genImage()">Generate</button>
+  <pre id="img_out"></pre>
+</div>
+
+<div id="voice" class="section">
+  <button onclick="goHome()">⬅ Back</button>
+  <h2>AI VOICE</h2>
+  <textarea id="voice_text"></textarea>
+  <select id="voice_name">
+    <option>BHART</option>
+    <option>ABHI</option>
+  </select>
+  <button onclick="genVoice()">Generate</button>
+  <pre id="voice_out"></pre>
+</div>
+
+<div id="long" class="section">
+  <button onclick="goHome()">⬅ Back</button>
+  <h2>LONG VIDEO</h2>
+  <textarea id="long_text"></textarea>
+  <button onclick="genLong()">Generate</button>
+  <pre id="long_out"></pre>
+</div>
+
+<script>
+function openPage(id){
+ document.querySelectorAll('.section').forEach(s=>s.style.display='none');
+ document.getElementById(id).style.display='block';
+}
+function goHome(){openPage('home')}
+
+function genImage(){
+ fetch('http://localhost:8000/ai-image',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({prompt:img_prompt.value})
+ }).then(r=>r.json()).then(d=>{
+  img_out.innerText=JSON.stringify(d,null,2)
+ })
+}
+
+function genVoice(){
+ fetch('http://localhost:8000/ai-voice',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({
+    text:voice_text.value,
+    voice:voice_name.value
+  })
+ }).then(r=>r.json()).then(d=>{
+  voice_out.innerText=JSON.stringify(d,null,2)
+ })
+}
+
+function genLong(){
+ fetch('http://localhost:8000/long-text-video',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({text:long_text.value})
+ }).then(r=>r.json()).then(d=>{
+  long_out.innerText=JSON.stringify(d,null,2)
+ })
+}
+</script>
+
+</body>
+</html>
+POST /long-text-video
+/ai-image
+/ai-voice
