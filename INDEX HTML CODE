@@ -1,0 +1,61 @@
+king_abhi_x/
+│
+├── backend/
+│   ├── main.py          ✅
+│   ├── video.py         ✅
+│   ├── voice.py         ✅
+│   ├── utils.py         ✅
+│   ├── requirements.txt
+│   └── voices/
+│       ├── BHART.wav
+│       ├── ABHI.wav
+│       ├── male_deep.wav
+│       └── ... (15 total)
+│
+└── frontend/
+    └── index.html
+import requests
+
+KLING_API = "https://api.klingai.com/v1/image2video"
+KLING_KEY = "YOUR_KLING_API_KEY"
+
+def kling_image_to_video(
+    image_path,
+    prompt,
+    fps=24,
+    version="3.0"
+):
+    files = {
+        "image": open(image_path, "rb")
+    }
+
+    data = {
+        "prompt": prompt,
+        "fps": fps,
+        "version": version   # 2.0 or 3.0
+    }
+
+    headers = {
+        "Authorization": f"Bearer {KLING_KEY}"
+    }
+
+    r = requests.post(
+        KLING_API,
+        files=files,
+        data=data,
+        headers=headers,
+        timeout=120
+    )
+
+    return r.json()
+video = kling_image_to_video(
+    image_path="scene1.png",
+    prompt=scene_prompt,
+    fps=24,
+    version="3.0"
+)
+
+voice = make_voice(
+    text=long_text,
+    voice_name="ABHI"
+)
