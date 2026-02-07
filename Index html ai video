@@ -1,0 +1,60 @@
+king_abhi_x/
+│
+├── backend/
+│   ├── main.py          ✅
+│   ├── video.py         ✅
+│   ├── voice.py         ✅
+│   ├── utils.py         ✅
+│   ├── requirements.txt
+│   └── voices/
+│       ├── BHART.wav
+│       ├── ABHI.wav
+│       ├── male_deep.wav
+│       └── ... (15 total)
+│
+└── frontend/
+    └── index.html
+voices/
+BHART.wav
+ABHI.wav   ✅
+male_deep.wav
+...
+child.wav
+from TTS.api import TTS
+import os
+
+tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2")
+
+VOICES = [
+    'BHART',        # default
+    'ABHI',         # NEW voice (confirmed)
+    'male_deep',
+    'male_soft',
+    'male_news',
+    'female_soft',
+    'female_clear',
+    'female_story',
+    'narrator',
+    'energetic',
+    'calm',
+    'devotional',
+    'podcast',
+    'story',
+    'child'
+]
+
+def make_voice(text, voice_name='BHART', out='voice.wav'):
+    if voice_name not in VOICES:
+        voice_name = 'BHART'
+
+    speaker_path = f'voices/{voice_name}.wav'
+    if not os.path.exists(speaker_path):
+        raise FileNotFoundError(f"Voice sample not found: {speaker_path}")
+
+    tts.tts_to_file(
+        text=text,
+        speaker_wav=speaker_path,
+        file_path=out,
+        language="hi"
+    )
+    return out
