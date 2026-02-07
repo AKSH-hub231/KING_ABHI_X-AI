@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>KING_ABHI_X</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0b1220;
+  color:white;
+}
+header{
+  padding:15px;
+  text-align:center;
+  font-size:22px;
+  background:#111a33;
+}
+.menu{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  padding:20px;
+}
+.card{
+  background:#1b2550;
+  padding:25px;
+  text-align:center;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:18px;
+}
+.card:hover{background:#24306e}
+
+.section{
+  display:none;
+  padding:20px;
+}
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:8px;
+  background:#4f7cff;
+  color:white;
+  cursor:pointer;
+}
+textarea,select,input{
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+}
+.back{
+  margin-bottom:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>🔥 KING_ABHI_X – AI STUDIO</header>
+
+<!-- HOME -->
+<div id="home" class="section" style="display:block">
+  <div class="menu">
+    <div class="card" onclick="openPage('image')">🖼️ AI IMAGE</div>
+    <div class="card" onclick="openPage('video')">🎬 AI VIDEO</div>
+    <div class="card" onclick="openPage('voice')">🎙️ AI VOICE</div>
+    <div class="card" onclick="openPage('long')">🎞️ LONG VIDEO</div>
+  </div>
+</div>
+
+<!-- AI IMAGE -->
+<div id="image" class="section">
+  <button class="back" onclick="goHome()">⬅ Back</button>
+  <h2>AI IMAGE</h2>
+  <textarea id="img_prompt" placeholder="Image prompt likhiye"></textarea>
+  <button onclick="genImage()">Generate Image</button>
+  <pre id="img_out"></pre>
+</div>
+
+<!-- AI VIDEO -->
+<div id="video" class="section">
+  <button class="back" onclick="goHome()">⬅ Back</button>
+  <h2>AI VIDEO</h2>
+  <textarea placeholder="Video prompt"></textarea>
+  <button>Generate Video</button>
+</div>
+
+<!-- AI VOICE -->
+<div id="voice" class="section">
+  <button class="back" onclick="goHome()">⬅ Back</button>
+  <h2>AI VOICE</h2>
+
+  <textarea id="voice_text" placeholder="Text likhiye"></textarea>
+
+  <select id="voice_name">
+    <option>BHART</option>
+    <option>ABHI</option>
+    <option>male_deep</option>
+    <option>female_soft</option>
+  </select>
+
+  <button onclick="genVoice()">Generate Voice</button>
+  <pre id="voice_out"></pre>
+</div>
+
+<!-- LONG VIDEO -->
+<div id="long" class="section">
+  <button class="back" onclick="goHome()">⬅ Back</button>
+  <h2>LONG TEXT → AI VIDEO</h2>
+
+  <textarea id="long_text" rows="8" placeholder="Long story / script likhiye"></textarea>
+
+  <select id="fps">
+    <option value="12">12 FPS</option>
+    <option value="24" selected>24 FPS</option>
+    <option value="30">30 FPS</option>
+  </select>
+
+  <button onclick="genLongVideo()">Generate Long Video</button>
+  <pre id="long_out"></pre>
+</div>
+
+<script>
+function openPage(id){
+  document.querySelectorAll('.section').forEach(s=>s.style.display='none');
+  document.getElementById(id).style.display='block';
+}
+function goHome(){
+  openPage('home');
+}
+
+// DEMO API CALLS
+function genLongVideo(){
+ fetch('http://localhost:8000/long-text-video',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({
+    text:document.getElementById('long_text').value,
+    fps:Number(document.getElementById('fps').value),
+    voice:document.getElementById('voice_name')?.value || 'BHART'
+  })
+ }).then(r=>r.json()).then(d=>{
+  document.getElementById('long_out').innerText=JSON.stringify(d,null,2);
+ });
+}
+</script>
+
+</body>
+</html>
